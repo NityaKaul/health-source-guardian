@@ -1,26 +1,27 @@
-# 💧 Water Health Surveillance Platform
+# 🩺 ASHA Health Surveillance Platform
 
-A comprehensive health surveillance and reporting interface focused on water-borne disease detection, designed specifically for ASHA (Accredited Social Health Activist) workers in rural communities.
+A complete full-stack health surveillance and reporting system focused on water-borne disease detection, designed specifically for ASHA (Accredited Social Health Activist) workers in rural communities.
 
 ![Water Health Surveillance](https://img.shields.io/badge/Health-Surveillance-2e7d32?style=for-the-badge) 
 ![React](https://img.shields.io/badge/React-18.3.1-61dafb?style=for-the-badge&logo=react) 
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178c6?style=for-the-badge&logo=typescript)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4+-38bdf8?style=for-the-badge&logo=tailwind-css)
+![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=node.js)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb)
 
 ## 🎯 Project Overview
 
-The Water Health Surveillance Platform enables ASHA workers to effectively monitor, report, and track water-borne diseases in their communities. Built with modern web technologies, it provides a mobile-friendly interface for field workers to submit case reports, log water quality tests, and stay informed about community health alerts.
+The ASHA Health Surveillance Platform is a complete end-to-end solution that enables community health workers to effectively monitor, report, and track water-borne diseases. The platform includes a React frontend with a Node.js + Express backend powered by MongoDB Atlas, providing real-time data management and secure authentication.
 
 ### 🌟 Key Features
 
-- **📱 Mobile-First Design**: Optimized for smartphones and tablets used by field workers
-- **🔐 ASHA Worker Authentication**: Secure login system for healthcare workers
-- **📋 Case Reporting**: Comprehensive form for reporting suspected water-borne disease cases
+- **📱 Mobile-First Design**: Responsive interface optimized for smartphones and tablets
+- **🔐 JWT Authentication**: Secure login system with password hashing and token management
+- **📋 Case Reporting**: Comprehensive forms for reporting suspected water-borne disease cases
 - **🧪 Water Quality Testing**: Log and track water quality parameters with automatic assessment
-- **🚨 Community Alerts**: Real-time notifications about health threats and outbreaks
+- **🚨 Community Alerts**: Real-time notifications about health threats and outbreaks from backend
 - **📊 Health Dashboard**: Visual overview of cases, tests, and community health status
-- **🎨 Accessible Design**: WCAG compliant with semantic HTML and keyboard navigation
-- **🌍 Progressive Web App**: Offline capability and app-like experience
+- **🖼️ Image Upload**: Secure file uploads with compression and storage
+- **🌍 Production Ready**: Deployed on Vercel with MongoDB Atlas integration
 
 ## 🛠️ Technology Stack
 
@@ -32,6 +33,22 @@ The Water Health Surveillance Platform enables ASHA workers to effectively monit
 - **Lucide React** - Beautiful icon system
 - **React Router** - Client-side routing
 - **Vite** - Fast development and build tool
+
+### Backend
+- **Node.js 18+** - Server runtime environment
+- **Express.js** - Web application framework
+- **MongoDB Atlas** - Cloud-hosted NoSQL database
+- **Mongoose** - Object modeling for MongoDB
+- **JWT** - JSON Web Token authentication
+- **Bcrypt** - Password hashing and security
+- **Multer** - File upload middleware
+- **CORS** - Cross-origin resource sharing
+
+### Database Schema
+- **Users Collection**: ASHA worker authentication and profiles
+- **Cases Collection**: Health case reports with patient data
+- **WaterTests Collection**: Water quality test results and parameters  
+- **Alerts Collection**: Community health alerts and notifications
 
 ### Backend Integration Ready
 - **RESTful API Architecture** - Ready for Node.js + Express backend
@@ -61,8 +78,8 @@ The Water Health Surveillance Platform enables ASHA workers to effectively monit
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/water-health-surveillance.git
-   cd water-health-surveillance
+   git clone https://github.com/your-username/asha-health-surveillance.git
+   cd asha-health-surveillance
    ```
 
 2. **Install dependencies**
@@ -70,13 +87,28 @@ The Water Health Surveillance Platform enables ASHA workers to effectively monit
    npm install
    ```
 
-3. **Start the development server**
+3. **Set up environment variables**
+   Create a `.env` file in the root directory:
+   ```env
+   MONGODB_URI=mongodb+srv://aryanraisingh2006_db_user:QeXzPDtjylI9xZZJ@cluster0.f2viyqs.mongodb.net/health_surveillance
+   JWT_SECRET=your-super-secret-jwt-key
+   PORT=5000
+   NODE_ENV=development
+   ```
+
+4. **Start the backend server**
+   ```bash
+   node server.js
+   ```
+
+5. **Start the frontend development server**
    ```bash
    npm run dev
    ```
 
-4. **Open your browser**
-   Navigate to `http://localhost:8080`
+6. **Access the application**
+   - Frontend: `http://localhost:8080`
+   - Backend API: `http://localhost:5000`
 
 ### Building for Production
 
@@ -86,54 +118,78 @@ npm run build
 
 The built files will be in the `dist/` directory, ready for deployment.
 
-## 📋 API Integration
+## 📋 API Endpoints
 
-The frontend is designed to work with the following backend endpoints:
+The platform includes a complete RESTful API backend with the following endpoints:
 
-### Authentication Endpoints
+### Authentication
 ```
-POST /api/auth/signup     - Register ASHA workers
-POST /api/auth/login      - Login ASHA workers  
-POST /api/auth/reset-password - Password reset
-```
-
-### Data Endpoints
-```
-POST /api/cases           - Submit case reports
-POST /api/water-tests     - Submit water quality data
-GET  /api/alerts          - Fetch community alerts
-POST /api/upload-image    - Upload compressed images
+POST /api/auth/signup         - Register new ASHA workers
+POST /api/auth/login          - Authenticate and login workers  
+POST /api/auth/reset-password - Request password reset
 ```
 
-### Sample API Response Format
+### Health Cases
+```
+POST /api/cases              - Submit new case reports
+GET  /api/cases              - Retrieve case reports (authenticated)
+```
 
-**Login Response:**
+### Water Quality Tests
+```
+POST /api/water-tests        - Submit water quality data
+GET  /api/water-tests        - Retrieve test results (authenticated)
+```
+
+### Community Alerts
+```
+GET  /api/alerts             - Fetch active community alerts
+POST /api/alerts             - Create new alerts (admin)
+```
+
+### File Management
+```
+POST /api/upload-image       - Upload and compress images
+```
+
+### API Response Examples
+
+**Successful Login:**
 ```json
 {
-  "success": true,
-  "data": {
-    "user": {
-      "id": "user_123",
-      "name": "Dr. Priya Sharma",
-      "email": "priya@health.gov.in",
-      "role": "ASHA Worker"
-    },
-    "token": "jwt_token_here"
+  "message": "Login successful",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "507f1f77bcf86cd799439011",
+    "name": "Dr. Priya Sharma",
+    "email": "priya@health.gov.in",
+    "role": "ASHA Worker"
   }
 }
 ```
 
-**Case Report Payload:**
+**Case Report Submission:**
 ```json
 {
   "patientName": "John Doe",
   "age": 35,
-  "gender": "male",
+  "gender": "male", 
   "symptoms": ["diarrhea", "vomiting", "fever"],
   "waterSource": "hand-pump",
   "location": "Ward 5, Village ABC",
-  "notes": "Patient reports drinking from community hand pump",
-  "image": "base64_encoded_image"
+  "notes": "Patient reports drinking from community hand pump"
+}
+```
+
+**Water Test Submission:**
+```json
+{
+  "location": "Hand Pump #3",
+  "turbidity": 2.5,
+  "ph": 6.8,
+  "temperature": 24.5,
+  "bacterialTest": "positive",
+  "notes": "High turbidity levels detected"
 }
 ```
 
@@ -226,22 +282,34 @@ npm run e2e              # Run end-to-end tests
 
 ## 🌐 Deployment
 
-### Vercel Deployment (Recommended)
-1. Connect your GitHub repository to Vercel
-2. Configure environment variables
-3. Deploy automatically on push to main branch
+### Vercel Deployment
 
-### Manual Deployment
-```bash
-npm run build
-# Upload dist/ folder to your web server
-```
+**Frontend Deployment:**
+1. Connect GitHub repository to Vercel
+2. Configure build settings:
+   - Framework Preset: Vite
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+3. Deploy automatically on push to main
 
-### Environment Variables
-```
-VITE_API_BASE_URL=https://your-api-domain.com
-VITE_APP_NAME=Water Health Surveillance
-VITE_ENABLE_OFFLINE=true
+**Backend Deployment:**
+1. The backend is configured for Vercel serverless functions
+2. Uses `vercel.json` for deployment configuration
+3. Set environment variables in Vercel dashboard:
+   - `MONGODB_URI`
+   - `JWT_SECRET`
+
+### Database Setup (MongoDB Atlas)
+- Production database is pre-configured
+- Connection string included in environment variables
+- Automatic sample data seeding on first launch
+- IP whitelist configured for global access
+
+### Environment Variables for Production
+```env
+MONGODB_URI=mongodb+srv://[credentials]@cluster0.f2viyqs.mongodb.net/health_surveillance
+JWT_SECRET=your-production-jwt-secret
+NODE_ENV=production
 ```
 
 ## 📊 Performance

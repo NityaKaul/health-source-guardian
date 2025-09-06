@@ -1,66 +1,48 @@
 import { useState, useEffect } from "react";
+import { Toaster } from "@/components/ui/toaster";
 import AuthView from "@/components/auth/AuthView";
 import HealthDashboard from "@/components/dashboard/HealthDashboard";
-import { useToast } from "@/hooks/use-toast";
+import { getAuthToken, removeAuthToken } from "@/lib/api";
 
 const Index = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentUser, setCurrentUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
+  const [user, setUser] = useState<any>(null);
+  const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    // Check for existing auth token
-    const token = localStorage.getItem('ashaPlatformToken');
-    const user = localStorage.getItem('ashaPlatformUser');
+    // Check for existing auth token on app load
+    const existingToken = getAuthToken();
+    const userData = localStorage.getItem('userData');
     
-    if (token && user) {
-      setCurrentUser(JSON.parse(user));
-      setIsAuthenticated(true);
+    if (existingToken && userData) {
+      setToken(existingToken);
+      setUser(JSON.parse(userData));
     }
-    setLoading(false);
   }, []);
 
-  const handleLogin = (userData: any, token: string) => {
-    localStorage.setItem('ashaPlatformToken', token);
-    localStorage.setItem('ashaPlatformUser', JSON.stringify(userData));
-    setCurrentUser(userData);
-    setIsAuthenticated(true);
-    toast({
-      title: "Login Successful",
-      description: `Welcome back, ${userData.name}!`,
-    });
+  const handleLogin = (userData: any, authToken: string) => {
+    setUser(userData);
+    setToken(authToken);
+    localStorage.setItem('userData', JSON.stringify(userData));
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('ashaPlatformToken');
-    localStorage.removeItem('ashaPlatformUser');
-    setCurrentUser(null);
-    setIsAuthenticated(false);
-    toast({
-      title: "Logged Out",
-      description: "You have been safely logged out.",
-    });
+    setUser(null);
+    setToken(null);
+    removeAuthToken();
+    localStorage.removeItem('userData');
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="droplet-spin text-primary text-4xl">💧</div>
-      </div>
-    );
-  }
 
   return (
     <main className="min-h-screen">
-      {isAuthenticated ? (
+      {user && token ? (
         <HealthDashboard 
-          user={currentUser} 
+          user={user} 
           onLogout={handleLogout}
         />
       ) : (
         <AuthView onLogin={handleLogin} />
       )}
+      <Toaster />
     </main>
   );
 };
