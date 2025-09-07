@@ -40,15 +40,8 @@ const WaterTestForm = ({ onBack }: WaterTestFormProps) => {
     setLoading(true);
 
     try {
-      const { submitWaterTest } = await import('@/lib/api');
-      await submitWaterTest({
-        location: formData.sourceLocation,
-        turbidity: parseFloat(formData.turbidity),
-        ph: parseFloat(formData.phLevel),
-        temperature: formData.temperature ? parseFloat(formData.temperature) : undefined,
-        bacterialTest: formData.bacteria,
-        notes: formData.notes
-      });
+      // Mock API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
 
       toast({
         title: "Water Test Submitted",
@@ -59,7 +52,7 @@ const WaterTestForm = ({ onBack }: WaterTestFormProps) => {
     } catch (error) {
       toast({
         title: "Submission Failed",
-        description: error instanceof Error ? error.message : "Please check your connection and try again.",
+        description: "Please check your connection and try again.",
         variant: "destructive",
       });
     } finally {

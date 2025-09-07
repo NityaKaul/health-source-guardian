@@ -36,21 +36,23 @@ const AuthView = ({ onLogin }: AuthViewProps) => {
     setLoading(true);
 
     try {
+      // Mock API call for demo - replace with actual backend
       if (isLogin) {
-        // Login with actual backend
-        const { login } = await import('@/lib/api');
-        const result = await login({
+        // Mock login
+        const mockUserData = {
+          id: "1",
+          name: "Dr. Priya Sharma",
           email: formData.email,
-          password: formData.password
-        });
+          role: "ASHA Worker"
+        };
+        const mockToken = "mock-jwt-token-" + Date.now();
         
-        onLogin(result.user, result.token);
-        toast({
-          title: "Login Successful",
-          description: "Welcome back to the ASHA Health Platform!",
-        });
+        setTimeout(() => {
+          onLogin(mockUserData, mockToken);
+          setLoading(false);
+        }, 1000);
       } else {
-        // Signup with actual backend
+        // Mock signup
         if (formData.password !== formData.confirmPassword) {
           toast({
             title: "Password Mismatch",
@@ -61,26 +63,29 @@ const AuthView = ({ onLogin }: AuthViewProps) => {
           return;
         }
 
-        const { signup } = await import('@/lib/api');
-        const result = await signup({
+        const mockUserData = {
+          id: "1",
           name: formData.name,
           email: formData.email,
-          password: formData.password
-        });
+          role: "ASHA Worker"
+        };
+        const mockToken = "mock-jwt-token-" + Date.now();
 
-        onLogin(result.user, result.token);
-        toast({
-          title: "Account Created",
-          description: "Welcome to the ASHA Health Platform!",
-        });
+        setTimeout(() => {
+          onLogin(mockUserData, mockToken);
+          setLoading(false);
+          toast({
+            title: "Account Created",
+            description: "Welcome to the ASHA Health Platform!",
+          });
+        }, 1000);
       }
     } catch (error) {
       toast({
         title: "Authentication Failed",
-        description: error instanceof Error ? error.message : "Please check your credentials and try again.",
+        description: "Please check your credentials and try again.",
         variant: "destructive",
       });
-    } finally {
       setLoading(false);
     }
   };

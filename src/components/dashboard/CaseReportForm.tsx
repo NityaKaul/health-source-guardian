@@ -58,26 +58,8 @@ const CaseReportForm = ({ onBack }: CaseReportFormProps) => {
     setLoading(true);
 
     try {
-      let imageUrl = '';
-      
-      // Upload image if selected
-      if (selectedFile) {
-        const { uploadImage } = await import('@/lib/api');
-        const uploadResult = await uploadImage(selectedFile);
-        imageUrl = uploadResult.imageUrl;
-      }
-
-      // Submit case report
-      const { submitCase } = await import('@/lib/api');
-      await submitCase({
-        patientName: formData.patientName,
-        age: parseInt(formData.age),
-        gender: formData.gender,
-        symptoms: formData.symptoms,
-        waterSource: formData.waterSource,
-        location: formData.location,
-        notes: formData.notes
-      });
+      // Mock API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
 
       toast({
         title: "Case Report Submitted",
@@ -88,7 +70,7 @@ const CaseReportForm = ({ onBack }: CaseReportFormProps) => {
     } catch (error) {
       toast({
         title: "Submission Failed", 
-        description: error instanceof Error ? error.message : "Please check your connection and try again.",
+        description: "Please check your connection and try again.",
         variant: "destructive",
       });
     } finally {
